@@ -1,50 +1,43 @@
+<div align="center">
+
 # tmux-mobaxterm-kit
 
-[English](README.md) | [中文](README.zh-CN.md)
+**A MobaXterm-friendly tmux setup with right-click menus, Shift copy, and fast scrollback.**
 
-A practical tmux configuration optimized for running tmux inside MobaXterm.
+<p>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/FusionSync/tmux-mobaxterm-kit?style=for-the-badge"></a>
+  <img alt="tmux 3.2+" src="https://img.shields.io/badge/tmux-3.2%2B-1BB91F?style=for-the-badge&logo=tmux&logoColor=white">
+  <img alt="Bash installer" src="https://img.shields.io/badge/bash-installer-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white">
+  <img alt="MobaXterm ready" src="https://img.shields.io/badge/MobaXterm-ready-0078D4?style=for-the-badge&logo=windowsterminal&logoColor=white">
+</p>
 
-It keeps tmux mouse support enabled while preserving the MobaXterm habits that make daily terminal work fast: right-click actions, Shift-based native text selection, and accelerated scrollback navigation.
+<p>
+  <a href="README.zh-CN.md">中文</a>
+  ·
+  <a href="#install">Install</a>
+  ·
+  <a href="#mouse-map">Mouse Map</a>
+  ·
+  <a href="#customize">Customize</a>
+</p>
 
-## Features
+</div>
 
-- Right-click tmux menu for common session, window, pane, view, and layout actions
-- One-click pane splitting, pane closing, pane zooming, window switching, and layout changes
-- Hold `Shift` to use MobaXterm native text selection and copy
-- Hold `Shift` and scroll the wheel to move through tmux history faster
-- Mouse selection inside tmux copy mode with word and line selection support
-- Large scrollback history limit for long-running terminal sessions
-- Optional script-based popup menu for users who prefer a full popup panel
+## Install
 
-## Requirements
-
-- tmux 3.2 or newer
-- MobaXterm, or another terminal with compatible mouse reporting
-- Bash for the optional installer and popup script
-
-Check your tmux version:
-
-```bash
-tmux -V
-```
-
-## Quick Start
-
-Clone the repository:
+Paste this into your shell:
 
 ```bash
-git clone git@github.com:FusionSync/tmux-mobaxterm-kit.git
-cd tmux-mobaxterm-kit
+curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
 ```
 
-Install the configuration:
+Prefer `wget`?
 
 ```bash
-chmod +x scripts/install.sh
-./scripts/install.sh
+wget -qO- https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
 ```
 
-Reload tmux:
+Reload tmux after installation:
 
 ```bash
 tmux source-file ~/.tmux.conf
@@ -52,22 +45,17 @@ tmux source-file ~/.tmux.conf
 
 The installer backs up an existing `~/.tmux.conf` to `~/.tmux.conf.bak.<timestamp>` before replacing it.
 
-## Manual Install
+## What You Get
 
-If you prefer to install manually:
+| Feature | Result |
+| --- | --- |
+| Right-click tmux menu | Split panes, switch windows, rename, kill, zoom, and change layouts quickly |
+| MobaXterm native selection | Hold `Shift` and drag to select/copy text with MobaXterm |
+| Fast tmux scrollback | Hold `Shift` and scroll the wheel to move through history faster |
+| Mouse copy mode | Scroll into history, select text, double-click words, triple-click lines |
+| No plugin manager required | A single `tmux.conf` plus optional helper scripts |
 
-```bash
-cp tmux.conf ~/.tmux.conf
-tmux source-file ~/.tmux.conf
-```
-
-You can also keep your current tmux config and source this kit from it:
-
-```tmux
-source-file ~/tmux-mobaxterm-kit/tmux.conf
-```
-
-## Mouse Behavior
+## Mouse Map
 
 | Action | Behavior |
 | --- | --- |
@@ -80,39 +68,31 @@ source-file ~/tmux-mobaxterm-kit/tmux.conf
 
 ## Right-Click Menu
 
-The default right-click menu includes:
+The default right-click menu is powered by tmux's native `display-menu` and includes:
 
-- Session: new session, rename session
-- Window: new window, rename window, choose window, previous/next window
-- Pane: split left/right, split top/bottom, kill pane, break pane, join pane, move pane, zoom/unzoom
-- View: copy mode, clear history, respawn pane, respawn window
-- Layout: even horizontal, even vertical, main horizontal, main vertical, tiled
+| Group | Actions |
+| --- | --- |
+| Session | New session, rename session |
+| Window | New window, rename window, choose window, previous/next window |
+| Pane | Split left/right, split top/bottom, kill pane, break pane, join pane, move pane, zoom/unzoom |
+| View | Copy mode, clear history, respawn pane, respawn window |
+| Layout | Even horizontal, even vertical, main horizontal, main vertical, tiled |
 
-## Optional Popup Panel
+## Requirements
 
-The default `tmux.conf` uses tmux's native `display-menu`, which is fast and lightweight.
+- tmux 3.2 or newer
+- MobaXterm, or another terminal with compatible mouse reporting
+- Bash, plus either `curl` or `wget` for the remote installer
 
-If you prefer a larger popup panel, install the scripts and bind right click to `display-popup` instead:
+Check your tmux version:
 
-```tmux
-bind-key -T root MouseDown3Pane display-popup -E -w 42 -h 30 "$HOME/.tmux/mobaxterm-kit/tmux-popup-menu.sh"
+```bash
+tmux -V
 ```
 
-The popup script is available at:
+## Customize
 
-```text
-scripts/tmux-popup-menu.sh
-```
-
-## MobaXterm Notes
-
-MobaXterm usually reserves `Shift` + mouse drag for native terminal selection even when tmux mouse mode is enabled. This is useful when you want to copy text exactly as it appears in the terminal.
-
-If right click still opens a MobaXterm context menu instead of the tmux menu, check your MobaXterm mouse and right-click settings. The terminal must send right-click mouse events to tmux for this configuration to handle them.
-
-## Configuration
-
-The main configuration file is:
+The main configuration lives in:
 
 ```text
 tmux.conf
@@ -126,6 +106,46 @@ set -g history-limit 100000
 setw -g mode-keys vi
 set -s set-clipboard on
 ```
+
+If you already maintain your own tmux config, source this kit instead of replacing your file:
+
+```tmux
+source-file ~/.tmux/mobaxterm-kit/tmux.conf
+```
+
+## Optional Popup Panel
+
+The default setup uses `display-menu` because it is fast and lightweight.
+
+If you prefer a larger popup panel, bind right click to the helper script after installing:
+
+```tmux
+bind-key -T root MouseDown3Pane display-popup -E -w 42 -h 30 "$HOME/.tmux/mobaxterm-kit/tmux-popup-menu.sh"
+```
+
+## Local Checkout
+
+For development or manual review:
+
+```bash
+git clone git@github.com:FusionSync/tmux-mobaxterm-kit.git
+cd tmux-mobaxterm-kit
+./scripts/install.sh
+```
+
+You can inspect the remote installer before running it:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh -o /tmp/tmux-mobaxterm-kit-install.sh
+less /tmp/tmux-mobaxterm-kit-install.sh
+bash /tmp/tmux-mobaxterm-kit-install.sh
+```
+
+## MobaXterm Notes
+
+MobaXterm usually reserves `Shift` + mouse drag for native terminal selection even when tmux mouse mode is enabled. This is useful when you want to copy text exactly as it appears in the terminal.
+
+If right click still opens a MobaXterm context menu instead of the tmux menu, check your MobaXterm mouse and right-click settings. The terminal must send right-click mouse events to tmux for this configuration to handle them.
 
 ## License
 
