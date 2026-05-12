@@ -28,13 +28,13 @@
 直接复制执行：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash -s -- zh-CN
 ```
 
 如果你更喜欢 `wget`：
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash -s -- zh-CN
 ```
 
 安装后重新加载 tmux 配置：
@@ -44,6 +44,13 @@ tmux source-file ~/.tmux.conf
 ```
 
 安装脚本会在覆盖前备份已有的 `~/.tmux.conf`，备份文件名类似 `~/.tmux.conf.bak.<timestamp>`。
+
+安装脚本只接收一个语言参数：
+
+```bash
+./scripts/install.sh en
+./scripts/install.sh zh-CN
+```
 
 ## 你会得到什么
 
@@ -96,6 +103,8 @@ tmux -V
 
 ```text
 tmux.conf
+tmux.en.conf
+tmux.zh-CN.conf
 ```
 
 关键默认配置：
@@ -130,7 +139,7 @@ bind-key -T root MouseDown3Pane display-popup -E -w 42 -h 30 "$HOME/.tmux/mobaxt
 ```bash
 git clone git@github.com:FusionSync/tmux-mobaxterm-kit.git
 cd tmux-mobaxterm-kit
-./scripts/install.sh
+./scripts/install.sh zh-CN
 ```
 
 如果你想先查看远程安装脚本再执行：
@@ -138,7 +147,7 @@ cd tmux-mobaxterm-kit
 ```bash
 curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh -o /tmp/tmux-mobaxterm-kit-install.sh
 less /tmp/tmux-mobaxterm-kit-install.sh
-bash /tmp/tmux-mobaxterm-kit-install.sh
+bash /tmp/tmux-mobaxterm-kit-install.sh zh-CN
 ```
 
 ## MobaXterm 使用说明

@@ -28,13 +28,13 @@
 Paste this into your shell:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash -s -- en
 ```
 
 Prefer `wget`?
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh | bash -s -- en
 ```
 
 Reload tmux after installation:
@@ -44,6 +44,13 @@ tmux source-file ~/.tmux.conf
 ```
 
 The installer backs up an existing `~/.tmux.conf` to `~/.tmux.conf.bak.<timestamp>` before replacing it.
+
+The installer accepts one language argument:
+
+```bash
+./scripts/install.sh en
+./scripts/install.sh zh-CN
+```
 
 ## What You Get
 
@@ -96,6 +103,8 @@ The main configuration lives in:
 
 ```text
 tmux.conf
+tmux.en.conf
+tmux.zh-CN.conf
 ```
 
 Important defaults:
@@ -130,7 +139,7 @@ For development or manual review:
 ```bash
 git clone git@github.com:FusionSync/tmux-mobaxterm-kit.git
 cd tmux-mobaxterm-kit
-./scripts/install.sh
+./scripts/install.sh en
 ```
 
 You can inspect the remote installer before running it:
@@ -138,7 +147,7 @@ You can inspect the remote installer before running it:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/FusionSync/tmux-mobaxterm-kit/main/scripts/install.sh -o /tmp/tmux-mobaxterm-kit-install.sh
 less /tmp/tmux-mobaxterm-kit-install.sh
-bash /tmp/tmux-mobaxterm-kit-install.sh
+bash /tmp/tmux-mobaxterm-kit-install.sh en
 ```
 
 ## MobaXterm Notes

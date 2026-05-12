@@ -10,6 +10,44 @@ target_conf="${TMUX_CONF_TARGET:-$HOME/.tmux.conf}"
 backup_suffix="$(date +%Y%m%d-%H%M%S)"
 source_path="${BASH_SOURCE[0]:-}"
 repo_root=""
+language="${1:-en}"
+
+usage() {
+  cat <<'USAGE'
+Usage: install.sh [en|zh-CN]
+
+Arguments:
+  en      Install the English tmux menu configuration.
+  zh-CN   Install the Chinese tmux menu configuration.
+USAGE
+}
+
+if [ "$#" -gt 1 ]; then
+  usage >&2
+  exit 1
+fi
+
+case "$language" in
+  en|english)
+    language="en"
+    config_file="tmux.en.conf"
+    popup_file="scripts/tmux-popup-menu.sh"
+    ;;
+  zh|zh-CN|cn|chinese)
+    language="zh-CN"
+    config_file="tmux.zh-CN.conf"
+    popup_file="scripts/tmux-popup-menu.zh-CN.sh"
+    ;;
+  -h|--help|help)
+    usage
+    exit 0
+    ;;
+  *)
+    echo "Unsupported language: $language" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
 
 download_file() {
   local url
@@ -34,7 +72,7 @@ download_file() {
 
 if [ -n "$source_path" ] && [ -f "$source_path" ]; then
   candidate_root="$(cd "$(dirname "$source_path")/.." && pwd)"
-  if [ -f "$candidate_root/tmux.conf" ] && [ -f "$candidate_root/scripts/tmux-popup-menu.sh" ]; then
+  if [ -f "$candidate_root/$config_file" ] && [ -f "$candidate_root/$popup_file" ]; then
     repo_root="$candidate_root"
   fi
 fi
@@ -42,11 +80,11 @@ fi
 mkdir -p "$install_dir"
 
 if [ -n "$repo_root" ]; then
-  cp "$repo_root/tmux.conf" "$install_dir/tmux.conf"
-  cp "$repo_root/scripts/tmux-popup-menu.sh" "$install_dir/tmux-popup-menu.sh"
+  cp "$repo_root/$config_file" "$install_dir/tmux.conf"
+  cp "$repo_root/$popup_file" "$install_dir/tmux-popup-menu.sh"
 else
-  download_file "$base_url/tmux.conf" "$install_dir/tmux.conf"
-  download_file "$base_url/scripts/tmux-popup-menu.sh" "$install_dir/tmux-popup-menu.sh"
+  download_file "$base_url/$config_file" "$install_dir/tmux.conf"
+  download_file "$base_url/$popup_file" "$install_dir/tmux-popup-menu.sh"
 fi
 
 chmod +x "$install_dir/tmux-popup-menu.sh"
@@ -57,5 +95,5 @@ fi
 
 cp "$install_dir/tmux.conf" "$target_conf"
 
-echo "Installed tmux-mobaxterm-kit to $target_conf"
+echo "Installed tmux-mobaxterm-kit ($language) to $target_conf"
 echo "Reload with: tmux source-file $target_conf"
